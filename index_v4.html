@@ -101,9 +101,16 @@ body.lang-vi [data-en]{display:none}
 .trust-badge svg{width:13px;height:13px;color:var(--gold)}
 
 /* Hero photo */
-.hero-photo{align-self:end}
-.hero-photo img{display:block;width:100%;max-height:360px;object-fit:cover;object-position:center top;border-radius:12px 12px 0 0;border:1px solid rgba(255,255,255,.15);border-bottom:none}
-.hero-photo-placeholder{height:320px;border-radius:12px 12px 0 0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-bottom:none;display:grid;place-items:center}
+.hero-photo{align-self:end;position:relative}
+.hero-photo-frame{position:relative;border-radius:16px 16px 0 0;overflow:hidden;border:1px solid rgba(255,255,255,.2);border-bottom:none;box-shadow:0 -8px 40px rgba(0,0,0,.25)}
+.hero-photo-frame img{display:block;width:100%;height:380px;object-fit:cover;object-position:center top}
+.hero-photo-frame::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,rgba(6,53,53,.6),transparent);pointer-events:none}
+.hero-photo-badge{position:absolute;bottom:20px;left:20px;right:20px;background:rgba(255,255,255,.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;z-index:2}
+.hero-photo-badge .badge-icon{width:36px;height:36px;border-radius:8px;background:var(--gold);display:grid;place-items:center;flex:none}
+.hero-photo-badge .badge-icon svg{width:18px;height:18px;color:#3A2A00}
+.hero-photo-badge b{display:block;font:700 13px 'Be Vietnam Pro',sans-serif;color:#fff}
+.hero-photo-badge span{display:block;font-size:11.5px;color:rgba(255,255,255,.65);margin-top:1px}
+.hero-photo-placeholder{height:380px;border-radius:16px 16px 0 0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-bottom:none;display:grid;place-items:center}
 .hero-photo-placeholder svg{width:64px;height:64px;color:rgba(255,255,255,.2)}
 
 /* Stats strip */
@@ -379,7 +386,20 @@ td.lo{color:var(--teal-dark);font-weight:800}
         </div>
       </div>
       <div class="hero-photo">
-        <img src="doctor-patient.png" alt="Bác sĩ tư vấn bệnh nhân" onerror="this.parentElement.innerHTML='<div class=hero-photo-placeholder><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M12 3v18M3 12h18\' stroke-width=\'2.5\'/></svg></div>'"/>
+        <div class="hero-photo-frame">
+          <img src="doctor-patient.png" alt="Bác sĩ tư vấn bệnh nhân quốc tế tại Vietmedtour"/>
+          <div class="hero-photo-badge">
+            <div class="badge-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+            </div>
+            <div>
+              <b data-vi>Tư vấn song ngữ · Miễn phí</b>
+              <b data-en>Bilingual Consultation · Free</b>
+              <span data-vi>Telemedicine · Visa · Điều trị · Hậu mãi 30 ngày</span>
+              <span data-en>Telemedicine · Visa · Treatment · 30-day Aftercare</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- Stats -->
