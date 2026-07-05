@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIETMEDTOUR — International Medical Tourism Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#0DB3B3;--teal-deep:#067D7D;--teal-dark:#06504F;--teal-darker:#043535;
+  --gold:#F6A623;--gold-pale:#FDF6E8;--gold-border:#EDD898;
+  --ink:#0F1E1E;--ink-2:#2A4040;--ink-3:#5A7070;--ink-4:#8FA8A8;
+  --white:#fff;--off:#F5FAFA;--rule:#E0ECEC;
+  --maxw:1160px;--r:10px;
+  --sh:0 2px 12px rgba(6,80,79,.08),0 8px 28px rgba(6,80,79,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Be Vietnam Pro','Segoe UI',system-ui,sans-serif;background:var(--off);color:var(--ink);line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:3px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+h1,h2,h3,h4{font-family:'Sora','Be Vietnam Pro',system-ui,sans-serif;letter-spacing:-.02em;line-height:1.18}
+
+/* ── Lang system ── */
+body.lang-en [data-vi]{display:none}
+body.lang-vi [data-en]{display:none}
+
+/* ══════════════════════════════
+   TOPBAR
+══════════════════════════════ */
+.topbar{background:var(--teal-darker);height:36px;display:flex;align-items:center}
+.topbar .wrap{display:flex;align-items:center;gap:20px;width:100%}
+.topbar a,.topbar span{font-size:12px;color:rgba(255,255,255,.5)}
+.topbar a:hover{color:#fff}
+.topbar .r{margin-left:auto;display:flex;align-items:center;gap:16px}
+.lang-pill{display:flex;border:1px solid rgba(255,255,255,.15);border-radius:4px;overflow:hidden}
+.lang-pill button{padding:2px 11px;font:700 11px 'Be Vietnam Pro',sans-serif;letter-spacing:.07em;background:none;border:none;color:rgba(255,255,255,.45);cursor:pointer;transition:.15s}
+.lang-pill button.on{background:var(--gold);color:#3A2A00}
+.lang-pill button:not(.on):hover{color:#fff;background:rgba(255,255,255,.1)}
+
+/* ══════════════════════════════
+   HEADER
+══════════════════════════════ */
+.hd{background:var(--teal);position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(6,80,79,.2)}
+.hd-inner{display:flex;align-items:center;gap:0;height:66px}
+.logo{display:flex;align-items:center;gap:12px;flex:none;padding-right:32px;border-right:1px solid rgba(255,255,255,.18)}
+.logo-mark{width:36px;height:36px;border-radius:7px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);display:grid;place-items:center}
+.logo-mark svg{width:19px;height:19px}
+.logo-text{font-family:'Sora',sans-serif;font-weight:800;font-size:18px;color:#fff;letter-spacing:-.025em}
+.logo-text em{color:var(--gold);font-style:normal}
+.logo-sub{font-size:9.5px;color:rgba(255,255,255,.65);letter-spacing:.1em;text-transform:uppercase;margin-top:1px}
+
+/* ── Tab navigation ── */
+.tabs{display:flex;gap:0;margin-left:24px;height:100%;flex:1}
+.tab-btn{display:flex;align-items:center;gap:7px;padding:0 18px;height:100%;font:600 13px 'Be Vietnam Pro',sans-serif;color:rgba(255,255,255,.72);background:none;border:none;cursor:pointer;position:relative;transition:color .15s;white-space:nowrap;border-bottom:3px solid transparent}
+.tab-btn svg{width:15px;height:15px;flex:none;opacity:.7;transition:opacity .15s}
+.tab-btn:hover{color:#fff}
+.tab-btn:hover svg{opacity:1}
+.tab-btn.active{color:#fff;border-bottom-color:var(--gold)}
+.tab-btn.active svg{opacity:1}
+
+.hd-cta{margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:7px;padding:9px 20px;background:var(--gold);color:#3A2A00;border:none;border-radius:5px;font:700 13px 'Be Vietnam Pro',sans-serif;cursor:pointer;transition:.15s;white-space:nowrap}
+.hd-cta:hover{background:#e09520}
+
+/* Mobile: hide top tabs, show bottom tab bar */
+@media(max-width:900px){
+  .hd .wrap{padding:0 16px}
+  .hd-inner{height:58px}
+  .logo{border-right:none;padding-right:0}
+  .tabs{display:none}
+  .hd-cta{display:none}
+  /* Add bottom padding so content not hidden behind bottom bar */
+  body{padding-bottom:68px}
+}
+
+/* ── Bottom Tab Bar (mobile only) ── */
+.bottom-bar{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:var(--white);
+  border-top:1px solid var(--rule);
+  box-shadow:0 -4px 20px rgba(6,80,79,.12);
+  safe-area-inset-bottom:env(safe-area-inset-bottom);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.bottom-bar-inner{
+  display:flex;
+  align-items:stretch;
+  height:62px;
+}
+.bb-btn{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:8px 4px 6px;
+  color:var(--ink-4);
+  transition:color .15s, background .15s;
+  border-top:2.5px solid transparent;
+  -webkit-tap-highlight-color:transparent;
+}
+.bb-btn svg{width:22px;height:22px;flex:none}
+.bb-btn span{font:600 10px 'Be Vietnam Pro',sans-serif;letter-spacing:.02em;white-space:nowrap}
+.bb-btn.active{color:var(--teal-dark);border-top-color:var(--gold)}
+.bb-btn:not(.active):active{background:var(--off)}
+
+@media(max-width:900px){
+  .bottom-bar{display:block}
+}
+
+/* ══════════════════════════════
+   PAGE SYSTEM
+══════════════════════════════ */
+.page{display:none;animation:fadeUp .25s ease both}
+.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══════════════════════════════
+   HOME PAGE
+══════════════════════════════ */
+.home-hero{background:linear-gradient(140deg,var(--teal-darker) 0%,var(--teal-dark) 60%,var(--teal) 100%);color:#fff;padding:64px 0 0;overflow:hidden;position:relative}
+.home-hero::after{content:'';position:absolute;right:0;top:0;width:50%;height:100%;background:radial-gradient(ellipse 80% 80% at 80% 30%,rgba(246,166,35,.14),transparent);pointer-events:none}
+.home-hero .wrap{display:grid;grid-template-columns:1fr 420px;gap:48px;align-items:end;position:relative;z-index:2}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;font:600 11px 'Be Vietnam Pro',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.hero-kicker::before{content:'';width:20px;height:1.5px;background:var(--gold)}
+.home-hero h1{font-size:clamp(34px,4.8vw,52px);font-weight:800;line-height:1.08;letter-spacing:-.03em}
+.home-hero h1 mark{background:none;color:var(--gold)}
+.hero-desc{font-size:15.5px;color:rgba(255,255,255,.7);margin-top:18px;max-width:480px;line-height:1.75}
+.hero-btns{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.btn-gold{display:inline-flex;align-items:center;gap:7px;padding:13px 26px;background:var(--gold);color:#3A2A00;border:1.5px solid var(--gold);border-radius:6px;font:700 14px 'Be Vietnam Pro',sans-serif;cursor:pointer;transition:.15s;white-space:nowrap}
+.btn-gold:hover{background:#e09520;border-color:#e09520}
+.btn-white{display:inline-flex;align-items:center;gap:7px;padding:13px 26px;background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.35);border-radius:6px;font:700 14px 'Be Vietnam Pro',sans-serif;cursor:pointer;transition:.15s;white-space:nowrap}
+.btn-white:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.6)}
+.hero-trust{display:flex;align-items:center;gap:16px;margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);flex-wrap:wrap}
+.trust-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.55)}
+.trust-badge svg{width:13px;height:13px;color:var(--gold)}
+
+/* Hero photo */
+.hero-photo{align-self:end;position:relative}
+.hero-photo-frame{position:relative;border-radius:16px 16px 0 0;overflow:hidden;border:1px solid rgba(255,255,255,.2);border-bottom:none;box-shadow:0 -8px 40px rgba(0,0,0,.25)}
+.hero-photo-frame img{display:block;width:100%;height:380px;object-fit:cover;object-position:center top}
+.hero-photo-frame::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,rgba(6,53,53,.6),transparent);pointer-events:none}
+.hero-photo-badge{position:absolute;bottom:20px;left:20px;right:20px;background:rgba(255,255,255,.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;z-index:2}
+.hero-photo-badge .badge-icon{width:36px;height:36px;border-radius:8px;background:var(--gold);display:grid;place-items:center;flex:none}
+.hero-photo-badge .badge-icon svg{width:18px;height:18px;color:#3A2A00}
+.hero-photo-badge b{display:block;font:700 13px 'Be Vietnam Pro',sans-serif;color:#fff}
+.hero-photo-badge span{display:block;font-size:11.5px;color:rgba(255,255,255,.65);margin-top:1px}
+.hero-photo-placeholder{height:380px;border-radius:16px 16px 0 0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-bottom:none;display:grid;place-items:center}
+.hero-photo-placeholder svg{width:64px;height:64px;color:rgba(255,255,255,.2)}
+
+/* Stats strip */
+.stats-strip{background:rgba(255,255,255,.05);border-top:1px solid rgba(255,255,255,.1)}
+.stats-strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.stat-item{padding:22px 20px;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
+.stat-item:last-child{border-right:none}
+.stat-item b{display:block;font:800 clamp(26px,3vw,36px) 'Sora',sans-serif;color:var(--gold);line-height:1}
+.stat-item span{display:block;font-size:11.5px;color:rgba(255,255,255,.5);margin-top:6px;line-height:1.4}
+
+/* Home cards grid */
+.home-cards{padding:48px 0 64px}
+.home-cards-label{font:600 11px 'Be Vietnam Pro',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-deep);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.home-cards-label::before{content:'';width:18px;height:1.5px;background:var(--teal)}
+.home-cards h2{font-size:clamp(22px,3vw,30px);font-weight:800;color:var(--ink);margin-bottom:32px}
+.nav-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.nav-card{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:26px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;position:relative;overflow:hidden}
+.nav-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--teal);transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.nav-card:hover{transform:translateY(-3px);box-shadow:var(--sh);border-color:var(--teal)}
+.nav-card:hover::before{transform:scaleX(1)}
+.nav-card .ic{width:44px;height:44px;border-radius:10px;background:var(--off);border:1px solid var(--rule);display:grid;place-items:center;color:var(--teal-deep);margin-bottom:16px;transition:background .15s,border-color .15s}
+.nav-card:hover .ic{background:rgba(13,179,179,.1);border-color:rgba(13,179,179,.3)}
+.nav-card .ic svg{width:22px;height:22px}
+.nav-card h3{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.nav-card p{font-size:13px;color:var(--ink-3);line-height:1.6}
+.nav-card .arr{position:absolute;bottom:20px;right:20px;width:28px;height:28px;border-radius:50%;background:var(--off);border:1px solid var(--rule);display:grid;place-items:center;transition:.15s}
+.nav-card:hover .arr{background:var(--teal);border-color:var(--teal)}
+.nav-card .arr svg{width:13px;height:13px;color:var(--ink-4);transition:color .15s}
+.nav-card:hover .arr svg{color:#fff}
+
+/* Who we are strip */
+.who-strip{background:var(--white);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:48px 0}
+.who-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.who-text h2{font-size:clamp(22px,2.8vw,28px);font-weight:800;color:var(--ink);margin-bottom:16px}
+.who-text p{font-size:15px;color:var(--ink-3);line-height:1.78;margin-bottom:12px}
+.who-text strong{color:var(--teal-dark)}
+.meta-list{list-style:none}
+.meta-row{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--rule);font-size:13.5px}
+.meta-row:first-child{border-top:1px solid var(--rule)}
+.meta-key{color:var(--ink-3)}
+.meta-val{font-weight:700;color:var(--ink);text-align:right}
+
+/* ══════════════════════════════
+   INNER PAGE SHELL
+══════════════════════════════ */
+.page-shell{padding:40px 0 64px}
+.page-header{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--rule)}
+.page-header .pg-label{font:600 11px 'Be Vietnam Pro',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-deep);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.page-header .pg-label::before{content:'';width:18px;height:1.5px;background:var(--teal)}
+.page-header h1{font-size:clamp(26px,3.5vw,36px);font-weight:800;color:var(--ink)}
+.page-header p{font-size:15.5px;color:var(--ink-3);margin-top:10px;max-width:640px;line-height:1.75}
+
+/* ── Cost page ── */
+.save-bar{display:inline-flex;align-items:center;gap:8px;background:var(--gold-pale);border:1px solid var(--gold-border);color:#8A6000;font:700 13px 'Be Vietnam Pro',sans-serif;padding:8px 18px;border-radius:5px;margin-top:16px}
+.tbl-wrap{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.tbl-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:680px}
+thead th{background:var(--teal-dark);color:#fff;font:700 12px 'Be Vietnam Pro',sans-serif;padding:14px 18px;text-align:left;white-space:nowrap;letter-spacing:.04em}
+thead th:first-child{padding-left:24px}
+tbody td{padding:14px 18px;border-top:1px solid var(--rule);font-size:14px;color:var(--ink-2)}
+tbody td:first-child{padding-left:24px;font-weight:600;color:var(--ink)}
+tbody tr:hover td{background:var(--off)}
+td.lo{color:var(--teal-dark);font-weight:800}
+.tbl-note{font-size:12px;color:var(--ink-4);padding:10px 24px 14px;border-top:1px solid var(--rule);background:var(--white)}
+
+/* ── Services page ── */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.svc-card{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:transform .15s}
+.svc-card:hover{transform:translateY(-3px)}
+.svc-top{height:100px;display:grid;place-items:center;position:relative}
+.svc-top svg{width:42px;height:42px;color:#fff;position:relative;z-index:2}
+.svc-top::after{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.15) 1px,transparent 1px);background-size:16px 16px}
+.g1{background:linear-gradient(135deg,#0DB3B3,#067D7D)}
+.g2{background:linear-gradient(135deg,#F6A623,#C97D0A)}
+.g3{background:linear-gradient(135deg,#067D7D,#04504F)}
+.g4{background:linear-gradient(135deg,#23B8F6,#0D7AB3)}
+.g5{background:linear-gradient(135deg,#5AC58B,#1F8A5E)}
+.g6{background:linear-gradient(135deg,#F67E5E,#C94A2A)}
+.svc-body{padding:20px}
+.svc-body h3{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.svc-body p{font-size:13px;color:var(--ink-3);line-height:1.65}
+.svc-tag{display:inline-block;margin-top:10px;font:600 10.5px 'Be Vietnam Pro',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-deep);background:var(--off);border:1px solid var(--rule);padding:3px 9px;border-radius:3px}
+
+/* ── Journey page ── */
+.jrn-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.jrn-card{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:22px 24px;display:flex;gap:18px;box-shadow:var(--sh);transition:transform .15s,border-color .15s}
+.jrn-card:hover{transform:translateX(4px);border-color:var(--teal)}
+.jrn-num{font:800 22px 'Sora',sans-serif;color:var(--teal);width:36px;flex:none;line-height:1;padding-top:2px}
+.jrn-card h4{font-size:15px;font-weight:700;color:var(--ink)}
+.jrn-card p{font-size:13px;color:var(--ink-3);margin-top:5px;line-height:1.6}
+.jrn-tag{display:inline-block;margin-top:8px;font:600 11px 'Be Vietnam Pro',sans-serif;color:var(--teal-deep);background:var(--off);border:1px solid var(--rule);padding:3px 9px;border-radius:3px}
+
+/* Commit grid inside journey */
+.commit-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 32px;margin-top:12px}
+.commit-row{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--rule)}
+.commit-row:nth-child(1),.commit-row:nth-child(2){border-top:1px solid var(--rule)}
+.commit-check{width:20px;height:20px;border-radius:50%;background:var(--teal-dark);display:grid;place-items:center;flex:none;margin-top:2px}
+.commit-check svg{width:10px;height:10px;color:#fff}
+.commit-row b{font:700 13.5px 'Be Vietnam Pro',sans-serif;color:var(--ink);display:block}
+.commit-row p{font-size:12.5px;color:var(--ink-3);margin-top:2px;line-height:1.55}
+
+/* ── Agent page ── */
+.agent-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.flow-bar{display:flex;align-items:stretch;border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;margin-bottom:24px;background:var(--white)}
+.flow-step{flex:1;padding:14px 12px;font:600 13px 'Be Vietnam Pro',sans-serif;color:var(--ink-3);text-align:center;background:var(--white)}
+.flow-step.hl{background:var(--off);color:var(--teal-dark)}
+.flow-div{width:1px;background:var(--rule)}
+.bene-list{list-style:none}
+.bene-item{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--rule);font-size:13.5px;color:var(--ink-2);line-height:1.55}
+.bene-item:first-child{border-top:1px solid var(--rule)}
+.bene-item::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none;margin-top:7px}
+.steps-col{display:flex;flex-direction:column;gap:12px}
+.step-card{display:grid;grid-template-columns:40px 1fr;gap:16px;background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);transition:.15s}
+.step-card:hover{border-color:var(--teal);transform:translateX(3px)}
+.step-n{font:800 16px 'Sora',sans-serif;color:var(--teal-deep);padding-top:2px}
+.step-card b{font-size:14.5px;font-weight:700;color:var(--ink);display:block}
+.step-card p{font-size:13px;color:var(--ink-3);margin-top:3px}
+.note-box{margin-top:14px;border:1px solid var(--gold-border);background:var(--gold-pale);border-radius:var(--r);padding:13px 16px;font-size:13px;color:#7A5500}
+.growth-h{font:700 16px 'Sora',sans-serif;color:var(--ink);margin:32px 0 14px}
+
+/* ── Contact page ── */
+.contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.contact-card{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:32px;box-shadow:var(--sh)}
+.contact-card h3{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.contact-card h3 svg{width:20px;height:20px;color:var(--teal)}
+.contact-info-row{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--rule);align-items:flex-start}
+.contact-info-row:last-child{border-bottom:none}
+.ci-icon{width:36px;height:36px;border-radius:8px;background:var(--off);border:1px solid var(--rule);display:grid;place-items:center;flex:none;color:var(--teal-deep)}
+.ci-icon svg{width:17px;height:17px}
+.ci-label{font-size:11.5px;color:var(--ink-4);letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:3px}
+.ci-val{font:600 14px 'Be Vietnam Pro',sans-serif;color:var(--ink)}
+.ci-val a{color:var(--teal-deep)}
+.cta-contact{background:linear-gradient(135deg,var(--teal-dark),var(--teal));border-radius:var(--r);padding:32px;color:#fff;position:relative;overflow:hidden}
+.cta-contact::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(246,166,35,.15)}
+.cta-contact h3{font-size:20px;font-weight:800;margin-bottom:10px;position:relative}
+.cta-contact p{font-size:14px;color:rgba(255,255,255,.7);margin-bottom:24px;line-height:1.7;position:relative}
+.cta-btns{display:flex;flex-direction:column;gap:10px;position:relative}
+.btn-solid-w{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;background:#fff;color:var(--teal-dark);border:none;border-radius:6px;font:700 14px 'Be Vietnam Pro',sans-serif;cursor:pointer;transition:.15s}
+.btn-solid-w:hover{background:var(--gold-pale)}
+.btn-outline-w{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.35);border-radius:6px;font:700 14px 'Be Vietnam Pro',sans-serif;cursor:pointer;transition:.15s}
+.btn-outline-w:hover{background:rgba(255,255,255,.2)}
+.eco-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
+.eco-card{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:22px;box-shadow:var(--sh)}
+.eco-card-h{font:700 13px 'Be Vietnam Pro',sans-serif;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.eco-card-h::before{content:'';width:4px;height:16px;background:var(--teal);border-radius:2px;flex:none}
+.eco-card ul{list-style:none}
+.eco-card li{font-size:12.5px;color:var(--ink-3);padding:5px 0;border-top:1px solid var(--rule);line-height:1.55}
+
+/* ── Footer ── */
+.footer{background:var(--teal-darker);color:rgba(255,255,255,.45);font-size:13px;margin-top:0}
+.footer .wrap{display:flex;justify-content:space-between;align-items:center;padding:20px 28px;flex-wrap:wrap;gap:12px}
+.footer-brand{font:800 16px 'Sora',sans-serif;color:#fff}
+.footer-brand em{color:var(--gold);font-style:normal}
+.footer-links{display:flex;gap:20px}
+.footer-links a{font-size:12px;color:rgba(255,255,255,.4);transition:color .15s}
+.footer-links a:hover{color:#fff}
+
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+@media(max-width:900px){
+  .home-hero .wrap{grid-template-columns:1fr;gap:32px}
+  .hero-photo{display:none}
+  .stats-strip .wrap{grid-template-columns:repeat(2,1fr)}
+  .nav-cards{grid-template-columns:1fr 1fr}
+  .who-grid{grid-template-columns:1fr}
+  .svc-grid{grid-template-columns:1fr 1fr}
+  .jrn-grid{grid-template-columns:1fr}
+  .commit-grid{grid-template-columns:1fr}
+  .commit-row:nth-child(2){border-top:none}
+  .agent-layout{grid-template-columns:1fr}
+  .contact-layout{grid-template-columns:1fr}
+  .eco-grid{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .nav-cards{grid-template-columns:1fr}
+  .svc-grid{grid-template-columns:1fr}
+  .stats-strip .wrap{grid-template-columns:repeat(2,1fr)}
+  .wrap{padding:0 16px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body class="lang-vi">
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="wrap">
+    <a href="tel:1900636615">☎ 1900 636 615</a>
+    <a href="mailto:info@vietmedtour.com">info@vietmedtour.com</a>
+    <div class="r">
+      <span data-vi style="font-size:12px;color:rgba(255,255,255,.5)">Lầu 4, 202 Lê Lai, Q.1, TP.HCM</span>
+      <span data-en style="font-size:12px;color:rgba(255,255,255,.5)">4/F, 202 Le Lai, Dist.1, HCMC</span>
+      <div class="lang-pill">
+        <button id="btnVI" class="on" onclick="setLang('vi')">VI</button>
+        <button id="btnEN" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Header + Tabs -->
+<header class="hd">
+  <div class="wrap">
+    <div class="hd-inner">
+      <a class="logo" href="#" onclick="showPage('home');return false">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M12 4v16M4 12h16"/><path d="M6 17c2.8-4 9.2-4 12 0" opacity=".55"/></svg>
+        </div>
+        <div>
+          <div class="logo-text">VIETMED<em>TOUR</em></div>
+          <div class="logo-sub" data-vi>Thành viên Vạn Thành Group</div>
+          <div class="logo-sub" data-en>Member of Van Thanh Group</div>
+        </div>
+      </a>
+      <nav class="tabs" role="tablist">
+        <button class="tab-btn active" id="tab-home" onclick="showPage('home')" role="tab" aria-selected="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+          <span data-vi>Trang chủ</span><span data-en>Home</span>
+        </button>
+        <button class="tab-btn" id="tab-cost" onclick="showPage('cost')" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span data-vi>Chi phí</span><span data-en>Cost</span>
+        </button>
+        <button class="tab-btn" id="tab-services" onclick="showPage('services')" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 3h6M10 3v5.5L4.7 18a2 2 0 0 0 1.8 3h11a2 2 0 0 0 1.8-3L14 8.5V3"/></svg>
+          <span data-vi>Dịch vụ</span><span data-en>Services</span>
+        </button>
+        <button class="tab-btn" id="tab-journey" onclick="showPage('journey')" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          <span data-vi>Hành trình</span><span data-en>Journey</span>
+        </button>
+        <button class="tab-btn" id="tab-agent" onclick="showPage('agent')" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span data-vi>Đối tác</span><span data-en>Partners</span>
+        </button>
+        <button class="tab-btn" id="tab-contact" onclick="showPage('contact')" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.07 6.07l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span data-vi>Liên hệ</span><span data-en>Contact</span>
+        </button>
+      </nav>
+      <a class="hd-cta" href="#" onclick="showPage('contact');return false" data-vi>Tư vấn miễn phí</a>
+      <a class="hd-cta" href="#" onclick="showPage('contact');return false" data-en>Free Consultation</a>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════
+     HOME PAGE
+══════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- Hero -->
+  <div class="home-hero">
+    <div class="wrap">
+      <div>
+        <div class="hero-kicker" data-vi>Du lịch Y tế Quốc tế · Điểm đến Việt Nam</div>
+        <div class="hero-kicker" data-en>International Medical Tourism · Vietnam Destination</div>
+        <h1 data-vi>An tâm trọn vẹn<br>với <mark>du lịch y tế</mark><br>minh bạch &amp; tin cậy</h1>
+        <h1 data-en>Peace of Mind<br>with <mark>Medical Tourism</mark><br>Transparent &amp; Trusted</h1>
+        <p class="hero-desc" data-vi>Vietmedtour — chi nhánh y tế quốc tế của Healthcare YBL, hơn 15 năm vận hành thực chiến. Đồng hành từ telemedicine, visa, điều trị đến chăm sóc 30 ngày sau dịch vụ.</p>
+        <p class="hero-desc" data-en>Vietmedtour — the international arm of Healthcare YBL, backed by 15+ years of real clinical operations. We guide you from telemedicine, visa, and treatment through to 30-day aftercare.</p>
+        <div class="hero-btns">
+          <a class="btn-gold" href="#" onclick="showPage('services');return false" data-vi>Khám phá dịch vụ</a>
+          <a class="btn-gold" href="#" onclick="showPage('services');return false" data-en>Explore Services</a>
+          <a class="btn-white" href="#" onclick="showPage('agent');return false" data-vi>Trở thành Agent</a>
+          <a class="btn-white" href="#" onclick="showPage('agent');return false" data-en>Become a Partner</a>
+        </div>
+        <div class="hero-trust">
+          <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span data-vi>VMIG · Healthcare YBL JSC</span><span data-en>VMIG · Healthcare YBL JSC</span></span>
+          <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span data-vi>14 chuyên khoa được cấp phép</span><span data-en>14 Licensed Specialties</span></span>
+          <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span data-vi>Tiết kiệm 40–70% so với Mỹ, Úc, Singapore</span><span data-en>Save 40–70% vs USA, Australia, Singapore</span></span>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <div class="hero-photo-frame">
+          <img src="doctor-patient.png" alt="Bác sĩ tư vấn bệnh nhân quốc tế tại Vietmedtour"/>
+          <div class="hero-photo-badge">
+            <div class="badge-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+            </div>
+            <div>
+              <b data-vi>Tư vấn song ngữ · Miễn phí</b>
+              <b data-en>Bilingual Consultation · Free</b>
+              <span data-vi>Telemedicine · Visa · Điều trị · Hậu mãi 30 ngày</span>
+              <span data-en>Telemedicine · Visa · Treatment · 30-day Aftercare</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Stats -->
+    <div class="stats-strip">
+      <div class="wrap">
+        <div class="stat-item"><b data-n="15">0</b><span data-vi>Năm kinh nghiệm y tế</span><span data-en>Years Healthcare Ops</span></div>
+        <div class="stat-item"><b data-n="7">0</b><span data-vi>Cơ sở y tế vận hành</span><span data-en>Medical Facilities</span></div>
+        <div class="stat-item"><b data-n="50">0</b><span data-vi>Đối tác doanh nghiệp</span><span data-en>Corporate Clients</span></div>
+        <div class="stat-item"><b data-n="25">0</b><span data-vi>Hãng bảo hiểm liên kết</span><span data-en>Insurance Partners</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nav cards -->
+  <div class="home-cards">
+    <div class="wrap">
+      <div class="home-cards-label" data-vi>Khám phá Vietmedtour</div>
+      <div class="home-cards-label" data-en>Explore Vietmedtour</div>
+      <h2 data-vi>Chọn mục bạn muốn tìm hiểu</h2>
+      <h2 data-en>Select a section to explore</h2>
+      <div class="nav-cards">
+        <div class="nav-card" onclick="showPage('cost')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <h3 data-vi>Bảng so sánh chi phí</h3><h3 data-en>Cost Comparison</h3>
+          <p data-vi>Tiết kiệm 40–70% so với Mỹ, Úc và Singapore với chất lượng chuẩn quốc tế.</p>
+          <p data-en>Save 40–70% vs USA, Australia, Singapore with international-standard quality.</p>
+          <div class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+        <div class="nav-card" onclick="showPage('services')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 3h6M10 3v5.5L4.7 18a2 2 0 0 0 1.8 3h11a2 2 0 0 0 1.8-3L14 8.5V3"/></svg></div>
+          <h3 data-vi>6 nhóm dịch vụ</h3><h3 data-en>6 Service Categories</h3>
+          <p data-vi>Tầm soát sức khỏe, nha khoa thẩm mỹ, phục hồi chức năng, wellness và tour văn hóa.</p>
+          <p data-en>Health screening, cosmetic dentistry, rehabilitation, wellness, and cultural tours.</p>
+          <div class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+        <div class="nav-card" onclick="showPage('journey')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div>
+          <h3 data-vi>Hành trình 8 bước</h3><h3 data-en>8-Stage Journey</h3>
+          <p data-vi>Từ tư vấn telemedicine đến chăm sóc hậu dịch vụ 30 ngày — đồng hành trọn vẹn.</p>
+          <p data-en>From telemedicine consultation to 30-day aftercare — full accompaniment throughout.</p>
+          <div class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+        <div class="nav-card" onclick="showPage('agent')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <h3 data-vi>Trở thành Agent</h3><h3 data-en>Become a Partner</h3>
+          <p data-vi>Mô hình đối tác minh bạch, hoa hồng cạnh tranh, không chịu trách nhiệm y khoa.</p>
+          <p data-en>Transparent partnership model, competitive commissions, zero medical liability.</p>
+          <div class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+        <div class="nav-card" onclick="showPage('contact')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.07 6.07l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <h3 data-vi>Liên hệ &amp; Tư vấn</h3><h3 data-en>Contact &amp; Consultation</h3>
+          <p data-vi>Tư vấn telemedicine miễn phí. Đội ngũ song ngữ phản hồi trong 24 giờ.</p>
+          <p data-en>Free telemedicine consultation. Bilingual team responds within 24 hours.</p>
+          <div class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+        <div class="nav-card" onclick="showPage('contact')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <h3 data-vi>Vì sao chọn Việt Nam?</h3><h3 data-en>Why Choose Vietnam?</h3>
+          <p data-vi>Thị trường ~$4B USD vào 2033, visa thông thoáng, 6.76M khách QT Quý 1/2026.</p>
+          <p data-en>~$4B USD market by 2033, open visa policy, 6.76M int'l arrivals in Q1/2026.</p>
+          <div class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Who we are -->
+  <div class="who-strip">
+    <div class="wrap">
+      <div class="who-grid">
+        <div class="who-text">
+          <h2 data-vi>Không phải startup — hệ thống y tế thực, vận hành thực chiến</h2>
+          <h2 data-en>Not a startup — a real, licensed healthcare system in operation</h2>
+          <p data-vi>Vietmedtour là đơn vị tư vấn &amp; giới thiệu du lịch y tế thuộc <strong>Healthcare YBL JSC — Đa khoa Vạn Thành Sài Gòn</strong>, thành viên Tập đoàn Y khoa Vạn Thành (VMIG). Chúng tôi sở hữu và vận hành phòng khám thực với <strong>14 chuyên khoa được cấp phép</strong>, phục vụ hơn 50 doanh nghiệp FDI hàng đầu tại Việt Nam.</p>
+          <p data-en>Vietmedtour is the medical tourism advisory arm of <strong>Healthcare YBL JSC — Van Thanh Saigon General Clinic</strong>, a member of VMIG. We own and operate real clinics with <strong>14 licensed specialties</strong>, serving 50+ leading FDI companies in Vietnam.</p>
+        </div>
+        <div>
+          <ul class="meta-list">
+            <li class="meta-row"><span class="meta-key" data-vi>Sứ mệnh</span><span class="meta-key" data-en>Mission</span><span class="meta-val" data-vi>An tâm · Minh bạch · Tin cậy</span><span class="meta-val" data-en>Peace of Mind · Transparent · Trusted</span></li>
+            <li class="meta-row"><span class="meta-key" data-vi>Giá trị cốt lõi</span><span class="meta-key" data-en>Core Values</span><span class="meta-val" data-vi>Minh bạch · Hợp tác · Thấu cảm</span><span class="meta-val" data-en>Transparency · Collaboration · Empathy</span></li>
+            <li class="meta-row"><span class="meta-key" data-vi>Tầm nhìn</span><span class="meta-key" data-en>Vision</span><span class="meta-val" data-vi>1 triệu du khách y tế QT</span><span class="meta-val" data-en>1M int'l medical tourists</span></li>
+            <li class="meta-row"><span class="meta-key" data-vi>Thành lập</span><span class="meta-key" data-en>Established</span><span class="meta-val">Healthcare YBL JSC · VMIG</span></li>
+            <li class="meta-row"><span class="meta-key" data-vi>Trụ sở</span><span class="meta-key" data-en>HQ</span><span class="meta-val" data-vi>Lầu 4, 202 Lê Lai, Q.1, TP.HCM</span><span class="meta-val" data-en>4/F, 202 Le Lai, Dist.1, HCMC</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /home -->
+
+<!-- ══════════════════════════════
+     COST PAGE
+══════════════════════════════ -->
+<div id="page-cost" class="page">
+  <div class="page-shell">
+    <div class="wrap">
+      <div class="page-header">
+        <div class="pg-label" data-vi>Lợi thế chi phí</div>
+        <div class="pg-label" data-en>Cost Advantage</div>
+        <h1 data-vi>Bảng so sánh chi phí điều trị</h1>
+        <h1 data-en>Treatment Cost Comparison</h1>
+        <p data-vi>Việt Nam mang đến chất lượng đạt chuẩn quốc tế với chi phí thấp hơn 40–70% so với Úc, Mỹ và Singapore.</p>
+        <p data-en>Vietnam delivers internationally accredited quality at 40–70% lower cost than Australia, the US, and Singapore.</p>
+        <div class="save-bar">✦ <span data-vi>Tiết kiệm 40–70% so với các nước phát triển</span><span data-en>Save 40–70% vs developed countries</span></div>
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-scroll">
+          <table>
+            <thead><tr>
+              <th data-vi>Dịch vụ (USD)</th><th data-en>Service (USD)</th>
+              <th>🇻🇳 Vietnam</th>
+              <th data-vi>Thái Lan</th><th data-en>Thailand</th>
+              <th>Singapore</th>
+              <th data-vi>Úc</th><th data-en>Australia</th>
+              <th data-vi>Mỹ</th><th data-en>USA</th>
+            </tr></thead>
+            <tbody>
+              <tr><td data-vi>Cấy ghép răng (implant)</td><td data-en>Dental Implant</td><td class="lo">$700–1,200</td><td>$1,000–1,800</td><td>$2,500–4,000</td><td>$4,000–7,000</td><td>$3,500–6,000</td></tr>
+              <tr><td data-vi>Trồng răng toàn hàm All-on-4</td><td data-en>All-on-4 Full Arch</td><td class="lo">$5,400–8,000</td><td>$8,000–12,000</td><td>$20,000–28,000</td><td>$25,000–40,000</td><td>$20,000–30,000</td></tr>
+              <tr><td data-vi>Mặt dán sứ Veneer (/răng)</td><td data-en>Porcelain Veneer (per tooth)</td><td class="lo">$250–500</td><td>$350–600</td><td>$800–1,200</td><td>$1,200–2,000</td><td>$1,000–2,500</td></tr>
+              <tr><td data-vi>Khám sức khỏe tổng quát</td><td data-en>General Health Check-up</td><td class="lo">$80–200</td><td>$150–350</td><td>$400–800</td><td>$500–1,000</td><td>$300–700</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tbl-note" data-vi>Nguồn: MedicalTourismCo, DentalTrip, SmileJet (2025–2026). Giá thực tế tùy độ phức tạp ca điều trị.</p>
+        <p class="tbl-note" data-en>Source: MedicalTourismCo, DentalTrip, SmileJet (2025–2026). Actual prices vary by case complexity.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SERVICES PAGE
+══════════════════════════════ -->
+<div id="page-services" class="page">
+  <div class="page-shell">
+    <div class="wrap">
+      <div class="page-header">
+        <div class="pg-label" data-vi>Danh mục dịch vụ</div>
+        <div class="pg-label" data-en>Service Portfolio</div>
+        <h1 data-vi>6 nhóm dịch vụ tích hợp</h1>
+        <h1 data-en>6 Integrated Service Categories</h1>
+        <p data-vi>Trải nghiệm du lịch y tế toàn diện — cho cả bệnh nhân và người đồng hành.</p>
+        <p data-en>A complete medical tourism experience — for patients and companions alike.</p>
+      </div>
+      <div class="svc-grid">
+        <div class="svc-card"><div class="svc-top g1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 3h6M10 3v5.5L4.7 18a2 2 0 0 0 1.8 3h11a2 2 0 0 0 1.8-3L14 8.5V3"/><path d="M7 15h10"/></svg></div><div class="svc-body"><h3 data-vi>Tầm soát sức khỏe</h3><h3 data-en>Health Screening</h3><p data-vi>Khám tổng quát, xét nghiệm chuyên sâu, nội soi, siêu âm, X-quang, CT &amp; MRI.</p><p data-en>Full check-up, advanced labs, endoscopy, ultrasound, X-ray, CT &amp; MRI.</p><span class="svc-tag">Health Screening</span></div></div>
+        <div class="svc-card"><div class="svc-top g2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 3c-2.5 0-4 2-4 4.5C3 11 5 13 6 16c.6 1.8.8 5 2.5 5 1.4 0 1-3.5 3.5-3.5S13.1 21 14.5 21c1.7 0 1.9-3.2 2.5-5 1-3 3-5 3-8.5C20 5 18.5 3 16 3c-2 0-2.5 1.5-4.5 1.5S9 3 7 3z"/></svg></div><div class="svc-body"><h3 data-vi>Nha khoa thẩm mỹ</h3><h3 data-en>Cosmetic Dentistry</h3><p data-vi>Implant, mặt dán sứ veneer, All-on-4, chỉnh nha, tẩy trắng răng.</p><p data-en>Implants, porcelain veneers, All-on-4, orthodontics, whitening.</p><span class="svc-tag">Cosmetic Dentistry</span></div></div>
+        <div class="svc-card"><div class="svc-top g3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="10" r="7"/><path d="M9 9.5c.8-1.5 2-2 3-2M12 17v4M9 21h6"/></svg></div><div class="svc-body"><h3 data-vi>Sức khỏe tâm thần</h3><h3 data-en>Mental Health</h3><p data-vi>Điều trị lo âu, trầm cảm, phục hồi trí nhớ và quản lý stress.</p><p data-en>Anxiety, depression, memory recovery, and stress management.</p><span class="svc-tag">Mental Health</span></div></div>
+        <div class="svc-card"><div class="svc-top g4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="5" r="2.5"/><path d="M12 7.5V13M12 13l-4 8M12 13l4 8M5 10.5C7 9 9.5 8.3 12 8.3s5 .7 7 2.2"/></svg></div><div class="svc-body"><h3 data-vi>Phục hồi chức năng</h3><h3 data-en>Rehabilitation</h3><p data-vi>Vật lý trị liệu, cơ xương khớp, phục hình răng / tay / chân / mắt giả.</p><p data-en>Physiotherapy, musculoskeletal, prosthetics for teeth / limbs / eyes.</p><span class="svc-tag">Rehabilitation</span></div></div>
+        <div class="svc-card"><div class="svc-top g5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 21c-4-3.5-8-6.6-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 3.5C20 14.4 16 17.5 12 21z"/><path d="M12 7v-3M9 4h6"/></svg></div><div class="svc-body"><h3 data-vi>Làm đẹp &amp; Wellness</h3><h3 data-en>Beauty &amp; Wellness</h3><p data-vi>Thẩm mỹ da y khoa, spa, tóc, móng và nghỉ dưỡng phục hồi.</p><p data-en>Medical aesthetics, spa, hair, nails, and wellness retreats.</p><span class="svc-tag">Beauty &amp; Wellness</span></div></div>
+        <div class="svc-card"><div class="svc-top g6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 21h18M5 21V8l5-4v17M14 21V10l5 3v8"/></svg></div><div class="svc-body"><h3 data-vi>Tour văn hóa</h3><h3 data-en>Cultural Tours</h3><p data-vi>Ẩm thực, di sản, thiên nhiên Việt Nam — cho bệnh nhân và người đồng hành.</p><p data-en>Vietnamese cuisine, heritage &amp; nature — for patients and companions.</p><span class="svc-tag">Cultural Tours</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     JOURNEY PAGE
+══════════════════════════════ -->
+<div id="page-journey" class="page">
+  <div class="page-shell">
+    <div class="wrap">
+      <div class="page-header">
+        <div class="pg-label" data-vi>Hành trình khách hàng</div>
+        <div class="pg-label" data-en>Customer Journey</div>
+        <h1 data-vi>Đồng hành trọn vẹn qua 8 giai đoạn</h1>
+        <h1 data-en>Full Accompaniment Through 8 Stages</h1>
+        <p data-vi>Từ khi còn ở nhà đến khi rời Việt Nam — Vietmedtour lo trải nghiệm &amp; hậu cần, cơ sở y tế đối tác lo điều trị lâm sàng.</p>
+        <p data-en>From home to Vietnam and back — Vietmedtour manages experience &amp; logistics, partner clinics handle all clinical treatment.</p>
+      </div>
+      <div class="jrn-grid">
+        <div class="jrn-card"><div class="jrn-num">01</div><div><h4 data-vi>Tư vấn</h4><h4 data-en>Consultation</h4><p data-vi>Liên hệ website / hotline. Tư vấn song ngữ &amp; đánh giá hồ sơ ban đầu.</p><p data-en>Contact via website / hotline. Bilingual consultation &amp; initial assessment.</p><span class="jrn-tag" data-vi>Telemedicine miễn phí</span><span class="jrn-tag" data-en>Free Telemedicine</span></div></div>
+        <div class="jrn-card"><div class="jrn-num">02</div><div><h4 data-vi>Lên kế hoạch</h4><h4 data-en>Planning</h4><p data-vi>Chốt gói, lịch hẹn, khách sạn, visa &amp; lịch trình chi tiết.</p><p data-en>Confirm package, appointments, hotel, visa &amp; full itinerary.</p><span class="jrn-tag" data-vi>HĐ + đặt cọc 30%</span><span class="jrn-tag" data-en>Contract + 30% deposit</span></div></div>
+        <div class="jrn-card"><div class="jrn-num">03</div><div><h4 data-vi>Đón tiếp</h4><h4 data-en>Arrival</h4><p data-vi>Đón sân bay, nhận phòng, phiên dịch tháp tùng suốt hành trình.</p><p data-en>Airport pickup, hotel check-in, interpreter escort throughout.</p><span class="jrn-tag" data-vi>Xe riêng + SIM + welcome kit</span><span class="jrn-tag" data-en>Private car + SIM + welcome kit</span></div></div>
+        <div class="jrn-card"><div class="jrn-num">04</div><div><h4 data-vi>Điều trị</h4><h4 data-en>Treatment</h4><p data-vi>Dịch vụ y tế tại cơ sở đối tác. Kết quả &amp; báo cáo song ngữ.</p><p data-en>Medical services at partner clinic. Bilingual results &amp; reports.</p><span class="jrn-tag" data-vi>Phiên dịch y tế túc trực</span><span class="jrn-tag" data-en>Dedicated medical interpreter</span></div></div>
+        <div class="jrn-card"><div class="jrn-num">05</div><div><h4 data-vi>Hồi phục</h4><h4 data-en>Recovery</h4><p data-vi>Theo dõi hậu điều trị. Tour + spa cho bệnh nhân &amp; người thân.</p><p data-en>Post-treatment monitoring. Tours &amp; spa for patient &amp; companions.</p><span class="jrn-tag" data-vi>Linh hoạt theo sức khỏe</span><span class="jrn-tag" data-en>Flexible to health condition</span></div></div>
+        <div class="jrn-card"><div class="jrn-num">06</div><div><h4 data-vi>Xuất viện</h4><h4 data-en>Discharge</h4><p data-vi>Bàn giao hồ sơ bệnh án, hướng dẫn chăm sóc tại nhà, tiễn sân bay.</p><p data-en>Medical records handover, home-care guidance, airport farewell.</p><span class="jrn-tag" data-vi>Hồ sơ song ngữ USB/email</span><span class="jrn-tag" data-en>Bilingual records USB/email</span></div></div>
+        <div class="jrn-card"><div class="jrn-num">07</div><div><h4 data-vi>Hậu mãi</h4><h4 data-en>Aftercare</h4><p data-vi>Telemedicine tái khám. Hỗ trợ đơn thuốc quốc tế 30 ngày.</p><p data-en>Telemedicine follow-up. International prescription support for 30 days.</p><span class="jrn-tag" data-vi>Hotline 24/7 · 30 ngày</span><span class="jrn-tag" data-en>24/7 Hotline · 30 days</span></div></div>
+        <div class="jrn-card"><div class="jrn-num">08</div><div><h4 data-vi>Giới thiệu</h4><h4 data-en>Referral</h4><p data-vi>Chương trình referral. Ưu đãi dành cho khách hàng quay lại.</p><p data-en>Referral programme. Loyalty benefits for returning clients.</p><span class="jrn-tag" data-vi>Quà tri ân</span><span class="jrn-tag" data-en>Thank-you rewards</span></div></div>
+      </div>
+
+      <!-- Commitments -->
+      <div style="margin-top:48px">
+        <h2 style="font-size:clamp(20px,2.8vw,26px);font-weight:800;color:var(--ink);margin-bottom:8px" data-vi>8 cam kết dành cho khách hàng quốc tế</h2>
+        <h2 style="font-size:clamp(20px,2.8vw,26px);font-weight:800;color:var(--ink);margin-bottom:8px" data-en>8 Commitments for International Clients</h2>
+        <p style="font-size:14px;color:var(--ink-3);margin-bottom:24px" data-vi>Mỗi cam kết được ghi rõ trong hợp đồng 3 bên (VMT + Khách hàng + Cơ sở y tế).</p>
+        <p style="font-size:14px;color:var(--ink-3);margin-bottom:24px" data-en>Each commitment is written into the tripartite contract (VMT + Client + Medical Facility).</p>
+        <div class="commit-grid">
+          <div class="commit-row"><div class="commit-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></div><div><b data-vi>Cơ sở y tế đạt chuẩn quốc tế</b><b data-en>Internationally Accredited Facilities</b><p data-vi>100% đối tác đạt chuẩn TCVN, JCI &amp; ACHSI.</p><p data-en>100% partners meet TCVN, JCI &amp; ACHSI standards.</p></div></div>
+          <div class="commit-row"><div class="commit-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></div><div><b data-vi>Bác sĩ chuyên khoa đồng hành</b><b data-en>Dedicated Specialist</b><p data-vi>Một bác sĩ hoặc ê-kíp theo suốt quá trình điều trị.</p><p data-en>One specialist or dedicated team throughout treatment.</p></div></div>
+          <div class="commit-row"><div class="commit-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></div><div><b data-vi>Giá minh bạch tuyệt đối</b><b data-en>Fully Transparent Pricing</b><p data-vi>Bảng kê chi tiết xác nhận bằng văn bản trước khi thực hiện.</p><p data-en>Itemised quote confirmed in writing before any service.</p></div></div>
+          <div class="commit-row"><div class="commit-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></div><div><b data-vi>Hồ sơ bệnh án song ngữ</b><b data-en>Bilingual Medical Records</b><p data-vi>Kết quả, đơn thuốc bằng tiếng Anh (hoặc Nhật / Hàn).</p><p data-en>All results, prescriptions in English (or Japanese / Korean).</p></div></div>
+          <div class="commit-row"><div class="commit-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></div><div><b data-vi>Chương trình người đồng hành</b><b data-en>Companion Programme</b><p data-vi>Người thân được tour, spa &amp; nghỉ dưỡng trong lúc điều trị.</p><p data-en>Companions enjoy tours, spa &amp; resort during treatment.</p></div></div>
+          <div class="commit-row"><div class="commit-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></div><div><b data-vi>Bảo hành quốc tế</b><b data-en>International Warranty</b><p data-vi>Vật liệu nguồn gốc toàn cầu &gt;90%. Hội chẩn từ xa.</p><p data-en>Materials from globally recognised sources &gt;90%.</p></div></div>
+          <div class="commit-row"><div class="commit-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></div><div><b data-vi>Hợp đồng 3 bên rõ ràng</b><b data-en>Tripartite Contract</b><p data-vi>Hotline 24/7 trong 30 ngày sau dịch vụ.</p><p data-en>24/7 hotline for 30 days post-service.</p></div></div>
+          <div class="commit-row"><div class="commit-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg></div><div><b data-vi>Không thu phí khách hàng</b><b data-en>No Fee to Clients</b><p data-vi>Phí do nhà cung cấp dịch vụ chi trả — không phụ thu.</p><p data-en>Fee paid by service providers — no extra charges to clients.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     AGENT PAGE
+══════════════════════════════ -->
+<div id="page-agent" class="page">
+  <div class="page-shell">
+    <div class="wrap">
+      <div class="page-header">
+        <div class="pg-label" data-vi>Hợp tác đối tác</div>
+        <div class="pg-label" data-en>Partnership</div>
+        <h1 data-vi>Trở thành Agent du lịch y tế quốc tế</h1>
+        <h1 data-en>Become an International Medical Tourism Agent</h1>
+        <p data-vi>Mô hình đơn giản, minh bạch — bảo vệ toàn diện quyền lợi Agent, không chịu bất kỳ trách nhiệm y khoa nào.</p>
+        <p data-en>Simple, transparent model — fully protecting Agent interests with zero medical liability.</p>
+      </div>
+      <div class="agent-layout">
+        <div>
+          <div class="flow-bar">
+            <div class="flow-step" data-vi>Bạn giới thiệu</div><div class="flow-step" data-en>You refer</div>
+            <div class="flow-div"></div>
+            <div class="flow-step hl" data-vi>Chúng tôi lo toàn bộ</div><div class="flow-step hl" data-en>We handle everything</div>
+            <div class="flow-div"></div>
+            <div class="flow-step" data-vi>Bạn nhận hoa hồng</div><div class="flow-step" data-en>You earn commission</div>
+          </div>
+          <ul class="bene-list">
+            <li class="bene-item" data-vi>Hoa hồng cạnh tranh theo sản lượng — đối soát minh bạch hàng tháng</li>
+            <li class="bene-item" data-en>Competitive volume-based commissions — transparent monthly reconciliation</li>
+            <li class="bene-item" data-vi>100% trách nhiệm y khoa thuộc cơ sở y tế được cấp phép</li>
+            <li class="bene-item" data-en>100% medical liability rests with the licensed medical facility</li>
+            <li class="bene-item" data-vi>Agent chỉ ký Hợp đồng giới thiệu — không tham gia hợp đồng 3 bên</li>
+            <li class="bene-item" data-en>Agents sign only a Referral Agreement — not party to the tripartite contract</li>
+            <li class="bene-item" data-vi>Tài liệu song ngữ, đào tạo online, trang đích đồng thương hiệu</li>
+            <li class="bene-item" data-en>Bilingual materials, online training, co-branded landing page</li>
+            <li class="bene-item" data-vi>Thị trường độc quyền theo thỏa thuận</li>
+            <li class="bene-item" data-en>Exclusive territory by agreement</li>
+          </ul>
+        </div>
+        <div>
+          <div class="steps-col">
+            <div class="step-card"><div class="step-n">1</div><div><b data-vi>Ký NDA song phương</b><b data-en>Sign Mutual NDA</b><p data-vi>Nhận bảng giá, hồ sơ cơ sở y tế và biểu hoa hồng đầy đủ.</p><p data-en>Receive full pricing, clinic profiles, and commission schedule.</p></div></div>
+            <div class="step-card"><div class="step-n">2</div><div><b data-vi>Thỏa thuận thị trường &amp; KPI</b><b data-en>Agree Territory &amp; KPIs</b><p data-vi>Thống nhất phạm vi, chỉ tiêu và các bậc hoa hồng.</p><p data-en>Align on scope, performance targets, and commission tiers.</p></div></div>
+            <div class="step-card"><div class="step-n">3</div><div><b data-vi>Ký HĐ &amp; bắt đầu giới thiệu</b><b data-en>Sign &amp; Start Referring</b><p data-vi>Bắt đầu giới thiệu — chúng tôi lo phần còn lại.</p><p data-en>Start referring clients — we handle the rest.</p></div></div>
+          </div>
+          <div class="note-box">💬 <span data-vi>Cam kết phản hồi trong <strong>24 giờ</strong> — <strong>partner@vietmedtour.com</strong></span><span data-en>We respond within <strong>24 hours</strong> — <strong>partner@vietmedtour.com</strong></span></div>
+        </div>
+      </div>
+
+      <div class="growth-h" data-vi>Mục tiêu tăng trưởng 2026–2028</div>
+      <div class="growth-h" data-en>Growth Targets 2026–2028</div>
+      <div class="tbl-wrap">
+        <div class="tbl-scroll">
+          <table>
+            <thead><tr>
+              <th data-vi>Chỉ tiêu</th><th data-en>Metric</th>
+              <th>2026</th><th>2027</th><th>2028</th>
+            </tr></thead>
+            <tbody>
+              <tr><td data-vi>Khách QT/năm</td><td data-en>Int'l clients/yr</td><td class="lo">600</td><td>1,200</td><td>2,400</td></tr>
+              <tr><td data-vi>Hoa hồng avg</td><td data-en>Avg commission</td><td class="lo">$200</td><td>$300</td><td>$400</td></tr>
+              <tr><td data-vi>Tổng doanh thu</td><td data-en>Total revenue</td><td class="lo">$120K</td><td>$360K</td><td>$960K</td></tr>
+              <tr><td data-vi>Đối tác BV/PK</td><td data-en>Hospital partners</td><td class="lo">20</td><td>30</td><td>50</td></tr>
+              <tr><td data-vi>Agent</td><td data-en>Agents</td><td class="lo">10–15</td><td>20–30</td><td>30–40</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     CONTACT PAGE
+══════════════════════════════ -->
+<div id="page-contact" class="page">
+  <div class="page-shell">
+    <div class="wrap">
+      <div class="page-header">
+        <div class="pg-label" data-vi>Liên hệ &amp; Tư vấn</div>
+        <div class="pg-label" data-en>Contact &amp; Consultation</div>
+        <h1 data-vi>Bắt đầu hành trình của bạn</h1>
+        <h1 data-en>Start Your Journey</h1>
+        <p data-vi>Tư vấn telemedicine miễn phí trước khi quyết định. Đội ngũ song ngữ phản hồi trong 24 giờ.</p>
+        <p data-en>Free telemedicine consultation before you decide. Bilingual team responds within 24 hours.</p>
+      </div>
+      <div class="contact-layout">
+        <div class="contact-card">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span data-vi>Thông tin liên hệ</span><span data-en>Contact Information</span></h3>
+          <div class="contact-info-row"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><span class="ci-label" data-vi>Địa chỉ</span><span class="ci-label" data-en>Address</span><span class="ci-val" data-vi>Lầu 4, 202 Lê Lai, P. Bến Thành, Q.1, TP. Hồ Chí Minh</span><span class="ci-val" data-en>4th Fl., 202 Le Lai St., Ben Thanh, Dist.1, Ho Chi Minh City</span></div></div>
+          <div class="contact-info-row"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.07 6.07l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><span class="ci-label">Hotline</span><span class="ci-val"><a href="tel:1900636615">1900 636 615</a></span></div></div>
+          <div class="contact-info-row"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><span class="ci-label" data-vi>Email khách hàng</span><span class="ci-label" data-en>Client Email</span><span class="ci-val"><a href="mailto:info@vietmedtour.com">info@vietmedtour.com</a></span></div></div>
+          <div class="contact-info-row"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><span class="ci-label" data-vi>Email đối tác Agent</span><span class="ci-label" data-en>Partner Email</span><span class="ci-val"><a href="mailto:partner@vietmedtour.com">partner@vietmedtour.com</a></span></div></div>
+        </div>
+        <div class="cta-contact">
+          <h3 data-vi>Tư vấn miễn phí ngay hôm nay</h3>
+          <h3 data-en>Get Free Consultation Today</h3>
+          <p data-vi>Đội ngũ song ngữ sẵn sàng hỗ trợ bạn và gia đình. Phản hồi trong vòng 24 giờ.</p>
+          <p data-en>Our bilingual team is ready to support you and your family. Response within 24 hours.</p>
+          <div class="cta-btns">
+            <a class="btn-solid-w" href="tel:1900636615">☎ Hotline 1900 636 615</a>
+            <a class="btn-outline-w" href="mailto:info@vietmedtour.com">✉ info@vietmedtour.com</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Eco -->
+      <div style="margin-top:40px">
+        <h2 style="font-size:clamp(20px,2.8vw,26px);font-weight:800;color:var(--ink);margin-bottom:24px" data-vi>Năng lực pháp lý &amp; hệ sinh thái</h2>
+        <h2 style="font-size:clamp(20px,2.8vw,26px);font-weight:800;color:var(--ink);margin-bottom:24px" data-en>Legal Foundation &amp; Ecosystem</h2>
+        <div class="eco-grid">
+          <div class="eco-card">
+            <div class="eco-card-h" data-vi>Giấy phép &amp; tuân thủ</div><div class="eco-card-h" data-en>Licences &amp; Compliance</div>
+            <ul>
+              <li data-vi>GPKD số 3603886263 (Sở Tài chính Đồng Nai, 30/03/2026)</li>
+              <li data-en>Business Reg. No. 3603886263 (Dong Nai, 30/03/2026)</li>
+              <li data-vi>GP KCB số 11602/HCM-GPHĐ (Sở Y tế TP.HCM, 26/01/2026)</li>
+              <li data-en>Medical Licence No. 11602/HCM-GPHĐ (HCMC, 26/01/2026)</li>
+              <li data-vi>Chứng nhận GPP số 18267/ĐKKDD-HCM (13/01/2026)</li>
+              <li data-en>GPP Pharmacy No. 18267/ĐKKDD-HCM (13/01/2026)</li>
+              <li data-vi>GP chi nhánh số 3603886263-002 (08/08/2025)</li>
+              <li data-en>Branch Reg. No. 3603886263-002 (08/08/2025)</li>
+            </ul>
+          </div>
+          <div class="eco-card">
+            <div class="eco-card-h" data-vi>14 chuyên khoa được cấp phép</div><div class="eco-card-h" data-en>14 Licensed Specialties</div>
+            <ul>
+              <li data-vi>Nội tổng hợp · Ngoại khoa · Sản phụ khoa · Nhi khoa</li>
+              <li data-en>Internal Medicine · Surgery · Obs &amp; Gynae · Paediatrics</li>
+              <li data-vi>Mắt · Tai Mũi Họng · Răng Hàm Mặt · Da liễu</li>
+              <li data-en>Ophthalmology · ENT · Dentistry &amp; Maxillofacial · Dermatology</li>
+              <li data-vi>Tâm thần · Vật lý trị liệu · Y học cổ truyền</li>
+              <li data-en>Psychiatry · Physiotherapy · Traditional Medicine</li>
+              <li data-vi>Y học lao động · Cận lâm sàng · Nhà thuốc GPP</li>
+              <li data-en>Occupational Medicine · Diagnostics · GPP Pharmacy</li>
+            </ul>
+          </div>
+          <div class="eco-card">
+            <div class="eco-card-h" data-vi>Khách hàng tiêu biểu</div><div class="eco-card-h" data-en>Key Corporate Clients</div>
+            <ul>
+              <li>Heineken Vietnam · CS Wind Vietnam</li>
+              <li>Gemadept – Terminal Link · Vina Kyoei Steel</li>
+              <li>AGC Chemicals · Crown Vũng Tàu</li>
+              <li>Zinc Oxide Corp · O-Sung Vina Tower</li>
+              <li>Hanacans · QH Plus · SMC Steel · Kraft of Asia</li>
+              <li data-vi>Cùng hơn 50 doanh nghiệp FDI</li>
+              <li data-en>And 50+ FDI &amp; domestic companies</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-brand">VIETMED<em>TOUR</em> <span style="font-size:12px;font-weight:400;color:rgba(255,255,255,.35);font-family:'Be Vietnam Pro',sans-serif">· Healthcare YBL JSC</span></div>
+    <div class="footer-links">
+      <a href="tel:1900636615">1900 636 615</a>
+      <a href="mailto:info@vietmedtour.com">info@vietmedtour.com</a>
+      <span style="color:rgba(255,255,255,.25)">© 2026 Van Thanh Medical Investment Group</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Language ──
+function setLang(l){
+  document.body.className='lang-'+l;
+  document.getElementById('btnVI').className=l==='vi'?'on':'';
+  document.getElementById('btnEN').className=l==='en'?'on':'';
+  document.documentElement.lang=l;
+  localStorage.setItem('vmtLang',l);
+}
+(function(){if(localStorage.getItem('vmtLang')==='en')setLang('en');})();
+
+// ── Tab navigation ──
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(t=>{t.classList.remove('active');t.removeAttribute('aria-selected');});
+  document.querySelectorAll('.bb-btn').forEach(b=>b.classList.remove('active'));
+  const pg = document.getElementById('page-'+id);
+  if(pg) pg.classList.add('active');
+  const tab = document.getElementById('tab-'+id);
+  if(tab){tab.classList.add('active');tab.setAttribute('aria-selected','true');}
+  const bb = document.getElementById('bb-'+id);
+  if(bb) bb.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  history.pushState(null,'','#'+id);
+}
+
+// Handle back/forward
+window.addEventListener('popstate',function(){
+  const hash = location.hash.replace('#','') || 'home';
+  showPage(hash);
+});
+
+// Load from hash on initial load
+(function(){
+  const hash = location.hash.replace('#','');
+  if(hash && document.getElementById('page-'+hash)) showPage(hash);
+})();
+
+// ── Counter animation ──
+const counters = document.querySelectorAll('.stat-item b');
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting) return;
+    const el=e.target, target=+el.dataset.n;
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches){el.textContent=target+'+';io.unobserve(el);return;}
+    let cur=0, step=Math.max(1,Math.round(target/40));
+    const t=setInterval(()=>{cur+=step;if(cur>=target){cur=target;clearInterval(t);}el.textContent=cur+'+';},28);
+    io.unobserve(el);
+  });
+},{threshold:.5});
+counters.forEach(c=>io.observe(c));
+</script>
+
+<!-- Bottom Tab Bar (mobile) -->
+<div class="bottom-bar" id="bottomBar">
+  <div class="bottom-bar-inner">
+    <button class="bb-btn active" id="bb-home" onclick="showPage('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      <span data-vi>Trang chủ</span><span data-en>Home</span>
+    </button>
+    <button class="bb-btn" id="bb-cost" onclick="showPage('cost')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span data-vi>Chi phí</span><span data-en>Cost</span>
+    </button>
+    <button class="bb-btn" id="bb-services" onclick="showPage('services')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v5.5L4.7 18a2 2 0 0 0 1.8 3h11a2 2 0 0 0 1.8-3L14 8.5V3"/></svg>
+      <span data-vi>Dịch vụ</span><span data-en>Services</span>
+    </button>
+    <button class="bb-btn" id="bb-journey" onclick="showPage('journey')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+      <span data-vi>Hành trình</span><span data-en>Journey</span>
+    </button>
+    <button class="bb-btn" id="bb-agent" onclick="showPage('agent')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span data-vi>Đối tác</span><span data-en>Partners</span>
+    </button>
+    <button class="bb-btn" id="bb-contact" onclick="showPage('contact')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.07 6.07l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span data-vi>Liên hệ</span><span data-en>Contact</span>
+    </button>
+  </div>
+</div>
+
+</body>
+</html>
