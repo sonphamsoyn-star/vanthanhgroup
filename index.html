@@ -314,12 +314,17 @@ td.lo{color:var(--teal-dark);font-weight:800}
 
 /* ── Footer ── */
 .footer{background:var(--teal-darker);color:rgba(255,255,255,.45);font-size:13px;margin-top:0}
-.footer .wrap{display:flex;justify-content:space-between;align-items:center;padding:20px 28px;flex-wrap:wrap;gap:12px}
-.footer-brand{font:800 16px 'Sora',sans-serif;color:#fff}
+.footer .wrap{display:flex;justify-content:space-between;align-items:center;padding:24px 28px;flex-wrap:nowrap;gap:16px}
+.footer-brand{flex:none}
 .footer-brand em{color:var(--gold);font-style:normal}
-.footer-links{display:flex;gap:20px}
-.footer-links a{font-size:12px;color:rgba(255,255,255,.4);transition:color .15s}
+.footer-links{display:flex;gap:20px;align-items:center;flex-wrap:nowrap}
+.footer-links a{font-size:12px;color:rgba(255,255,255,.4);transition:color .15s;white-space:nowrap}
 .footer-links a:hover{color:#fff}
+@media(max-width:900px){
+  .footer .wrap{flex-direction:column;align-items:flex-start;padding:24px 20px;gap:16px}
+  .footer-links{flex-direction:column;gap:8px;align-items:flex-start}
+  .footer-links a,.footer-links span{font-size:13px}
+}
 
 /* ══════════════════════════════
    RESPONSIVE
